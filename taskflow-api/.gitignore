@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Test y Cobertura
+coverage/
+test_output.txt
+
+# Entorno y Secretos
+.env
+.env.test
+.env.local
+.env.*
+!.env.example
+!.env.test.example
+
+# Archivos Temporales de Diagnóstico
+test_*.js
+create_test_db.js
+find_env.js
+guess_db.js
+*.txt
+*.log
+
+# Logs y Temas de Sistema
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
