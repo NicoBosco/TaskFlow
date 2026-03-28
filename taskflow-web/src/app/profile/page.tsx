@@ -140,7 +140,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="space-y-2">
-            <div className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.2em]">ID de Identidad</div>
+            <div className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.2em]">ID de usuario</div>
             <div className="text-sm font-mono text-slate-400">TF-{user.id.toString().padStart(6, '0')}</div>
           </div>
 
@@ -153,7 +153,7 @@ export default function ProfilePage() {
           onClick={logout}
           className="px-10 py-5 bg-red-500/10 text-red-500 font-black rounded-2xl border border-red-500/20 hover:bg-red-500 hover:text-white transition-all active:scale-95"
         >
-          Cerrar Sesión Segura
+          Cerrar Sesión
         </button>
         <div className="p-5 text-slate-400 text-sm font-medium">
           ¿Necesitás ayuda con tu cuenta? <span onClick={() => setSupportModal(true)} className="text-indigo-600 font-bold cursor-pointer hover:underline">Contactar soporte</span>

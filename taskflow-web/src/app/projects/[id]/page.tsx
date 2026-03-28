@@ -166,8 +166,8 @@ export default function ProjectTasksPage() {
         ) : tasks.length === 0 ? (
           <div className="py-20 bg-slate-50/50 dark:bg-slate-900/20 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-white/5">
             <EmptyState
-              title={hasFilters ? 'Sin coincidencias' : 'El vacío creativo'}
-              description={hasFilters ? 'No encontramos tareas que coincidan con tus filtros.' : 'Tu tablero está listo para recibir la primera gran idea.'}
+              title={hasFilters ? 'Sin coincidencias' : 'Sin tareas'}
+              description={hasFilters ? 'Ninguna tarea coincide con los filtros activos.' : 'Este proyecto no tiene tareas aún.'}
               action={!hasFilters ? <Button onClick={() => setModalOpen(true)}>Crear primera tarea</Button> : undefined}
             />
           </div>

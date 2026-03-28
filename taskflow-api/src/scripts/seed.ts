@@ -1,31 +1,39 @@
 import pool from '../config/db';
 
 async function seedDemoData() {
-  console.log('🏗️  Iniciando carga de datos de prueba...');
+  console.log('Iniciando carga de datos de demo...');
   
   try {
-    // Verificación de conexión
-    console.log('🔍 Verificando conexión para carga de datos...');
+    console.log('Verificando conexión...');
     const bridge = await pool.connect();
     bridge.release();
-    console.log('✅ Conexión establecida.');
+    console.log('Conexión OK.');
     
     const userRes = await pool.query('SELECT id FROM users WHERE email = $1', ['demo@taskflow.com']);
     if (userRes.rowCount === 0) {
-      console.log('❌ Error: Usuario demo no encontrado.');
+      console.log('Error: usuario demo no encontrado. Ejecutá primero las migraciones.');
       process.exit(1);
     }
     const userId = userRes.rows[0].id;
 
-    // Limpieza total para reconstrucción
+    // Limpieza previa
     await pool.query('DELETE FROM projects WHERE user_id = $1', [userId]);
-    console.log('🧹 Limpieza de datos previa completada.');
+    console.log('Datos previos eliminados.');
 
     // 1. PROYECTOS ACTIVOS
     const activeProjects = [
-      { name: '🚀 TaskFlow: Preparación v1.0', desc: 'Tareas pendientes para el lanzamiento oficial. Revisión de infraestructura y ajustes finales de UI.' },
-      { name: '⚡ Buscador Global', desc: 'Implementación de barra de comandos para navegación rápida en la plataforma.' },
-      { name: '🛠️ Optimizaciones de API', desc: 'Mejoras en el manejo de errores y refactorización del core de la aplicación.' }
+      {
+        name: '🚀 TaskFlow v1.0',
+        desc: 'Tareas pendientes para el lanzamiento. Revisión de infraestructura y ajustes de UI.'
+      },
+      {
+        name: '⚡ Buscador Global',
+        desc: 'Barra de comandos para navegación rápida dentro de la app.'
+      },
+      {
+        name: '🛠️ Optimizaciones de API',
+        desc: 'Mejoras en manejo de errores y refactorización de endpoints.'
+      }
     ];
 
     for (const p of activeProjects) {
@@ -38,44 +46,59 @@ async function seedDemoData() {
       if (p.name.includes('TaskFlow')) {
         const t1 = await pool.query(
           "INSERT INTO tasks (project_id, title, description, status, priority, tags) VALUES ($1, $2, $3, $4, $5, '{infra, dev}') RETURNING id",
-          [pid, 'Desplegar Docker en Vercel', 'Hay que ver si el build no explota con las nuevas dependencias.', 'done', 'high']
+          [pid, 'Deploy en producción', 'Verificar que el build pase con las nuevas dependencias.', 'done', 'high']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Armar Dockerfile', true), ($1, 'Configurar logs', true), ($1, 'Variables de entorno', true)", [t1.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Armar Dockerfile', true), ($1, 'Configurar logs', true), ($1, 'Variables de entorno', true)",
+          [t1.rows[0].id]
+        );
 
         const t2 = await pool.query(
           "INSERT INTO tasks (project_id, title, description, status, priority, tags) VALUES ($1, $2, $3, $4, $5, '{frontend}') RETURNING id",
-          [pid, 'Refinar Modo Oscuro', 'Ajustar contraste en formularios y asegurar legibilidad en componentes críticos.', 'in_progress', 'high']
+          [pid, 'Refinar modo oscuro', 'Ajustar contraste en formularios y revisar legibilidad en los componentes.', 'in_progress', 'high']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Fix inputs login', true), ($1, 'Fondo del dashboard', false), ($1, 'Iconos de la navbar', false)", [t2.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Inputs del login', true), ($1, 'Fondo del dashboard', false), ($1, 'Iconos de la navbar', false)",
+          [t2.rows[0].id]
+        );
 
         await pool.query(
           "INSERT INTO tasks (project_id, title, description, status, priority, tags) VALUES ($1, $2, $3, $4, $5, '{marketing}')",
-          [pid, 'Optimización SEO y OpenGraph', 'Configuración de meta-etiquetas para correcta visualización en redes sociales.', 'todo', 'medium']
+          [pid, 'SEO y OpenGraph', 'Configurar meta-tags para que los links se vean bien al compartirlos.', 'todo', 'medium']
         );
 
         const t3 = await pool.query(
           "INSERT INTO tasks (project_id, title, description, status, priority, tags) VALUES ($1, $2, $3, $4, $5, '{pagos}') RETURNING id",
-          [pid, 'Módulo de Suscripciones', 'Implementación de pasarela de pagos para funciones extendidas.', 'todo', 'high']
+          [pid, 'Módulo de suscripciones', 'Integrar una pasarela de pagos para el plan pago.', 'todo', 'high']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Webhook de eventos', false), ($1, 'Precios en la landing', false), ($1, 'Mails de recibo', false)", [t3.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Webhook de Stripe', false), ($1, 'Página de precios', false), ($1, 'Mails de confirmación', false)",
+          [t3.rows[0].id]
+        );
       }
 
       if (p.name.includes('Buscador')) {
         const t4 = await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{ux, front}') RETURNING id",
-          [pid, 'Atajo global de teclado (Ctrl+K)', 'done', 'high']
+          [pid, 'Atajo de teclado Ctrl+K', 'done', 'high']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Event listener', true), ($1, 'Estado abierto/cerrado', true)", [t4.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Event listener global', true), ($1, 'Estado abierto/cerrado', true)",
+          [t4.rows[0].id]
+        );
 
         const t5 = await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{logica}') RETURNING id",
-          [pid, 'Buscador con Fuse.js', 'in_progress', 'medium']
+          [pid, 'Búsqueda con Fuse.js', 'in_progress', 'medium']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Ranking por relevancia', false), ($1, 'Indexar proyectos', true)", [t5.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Ranking por relevancia', false), ($1, 'Indexar proyectos', true)",
+          [t5.rows[0].id]
+        );
 
         await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{ui}')",
-          [pid, 'Efecto de desenfoque en el fondo', 'todo', 'low']
+          [pid, 'Backdrop blur en el overlay', 'todo', 'low']
         );
       }
 
@@ -84,44 +107,53 @@ async function seedDemoData() {
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{backend}') RETURNING id",
           [pid, 'Caché con Redis', 'done', 'high']
         );
-        await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Setup servidor', true), ($1, 'Invalidar al actualizar', true)", [t6.rows[0].id]);
+        await pool.query(
+          "INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Setup del servidor', true), ($1, 'Invalidar caché al actualizar', true)",
+          [t6.rows[0].id]
+        );
 
         await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{seguridad}')",
-          [pid, 'Límite de peticiones (Rate Limit)', 'in_progress', 'medium']
+          [pid, 'Rate limiting en endpoints', 'in_progress', 'medium']
         );
         
         await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{dev}')",
-          [pid, 'Centralizar logs con Winston', 'todo', 'low']
+          [pid, 'Logs centralizados con Winston', 'todo', 'low']
         );
       }
     }
 
-    // 2. PROYECTO ARCHIVADO (Legacy)
+    // 2. PROYECTO ARCHIVADO
     const pArchived = await pool.query(
       "INSERT INTO projects (user_id, name, description, status, archived_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id",
-      [userId, '📁 Versión Alpha (PHP/jQuery)', 'La primera versión rudimentaria antes de pasarnos a Node.', 'finished']
+      [userId, '📁 Versión Alpha (PHP/jQuery)', 'La primera versión antes de migrar a Node. Archivada como referencia.', 'finished']
     );
     await pool.query(
       "INSERT INTO tasks (project_id, title, status, priority, archived_at) VALUES ($1, $2, $3, $4, NOW()), ($1, $5, $3, $4, NOW())",
-      [pArchived.rows[0].id, 'Configurar servidor Apache', 'done', 'low', 'Arreglar scripts de mails']
+      [pArchived.rows[0].id, 'Configurar servidor Apache', 'done', 'low', 'Arreglar scripts de envío de mails']
     );
 
-    // 3. PROYECTO EN PAPELERA (Trash)
+    // 3. PROYECTO EN PAPELERA
     const pTrash = await pool.query(
       "INSERT INTO projects (user_id, name, description, status, deleted_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING id",
-      [userId, '🗑️ Experimento Descartado', 'Prototipo de tableros con tecnología experimental (Cripto).', 'active']
+      [userId, '🗑️ Prototipo Descartado', 'Tablero experimental que no llegó a ningún lado. Pendiente de limpieza.', 'active']
     );
-    await pool.query("INSERT INTO tasks (project_id, title, status, deleted_at) VALUES ($1, $2, $3, NOW())", [pTrash.rows[0].id, 'Investigar contratos inteligentes', 'todo']);
+    await pool.query(
+      "INSERT INTO tasks (project_id, title, status, deleted_at) VALUES ($1, $2, $3, NOW())",
+      [pTrash.rows[0].id, 'Investigar alternativas de BD grafo', 'todo']
+    );
 
-    // 4. TAREAS ARCHIVADAS Y ELIMINADAS EN PROYECTO 1
-    const mainPidRes = await pool.query('SELECT id FROM projects WHERE user_id = $1 AND name LIKE $2', [userId, '%TaskFlow%']);
+    // 4. TAREAS ARCHIVADAS Y ELIMINADAS EN PROYECTO PRINCIPAL
+    const mainPidRes = await pool.query(
+      'SELECT id FROM projects WHERE user_id = $1 AND name LIKE $2',
+      [userId, '%TaskFlow%']
+    );
     if (mainPidRes.rowCount! > 0) {
       const mainPid = mainPidRes.rows[0].id;
       await pool.query(
         "INSERT INTO tasks (project_id, title, status, archived_at) VALUES ($1, $2, $3, NOW()), ($1, $4, $3, NOW())",
-        [mainPid, '📦 Backup de Enero', 'done', '📧 Avisar a los beta testers (v0.5)']
+        [mainPid, 'Backup de enero', 'done', 'Avisar a los beta testers (v0.5)']
       );
       
       await pool.query(
@@ -130,11 +162,11 @@ async function seedDemoData() {
       );
     }
 
-    console.log('✅ Demo Ultra-Completa sembrada con éxito.');
+    console.log('Demo data cargada correctamente.');
     process.exit(0);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Error desconocido';
-    console.error('❌ Error fatal en la carga de datos:', message);
+    console.error('Error al cargar demo data:', message);
     process.exit(1);
   }
 }
