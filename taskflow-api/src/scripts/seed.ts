@@ -35,7 +35,7 @@ async function seedDemoData() {
       );
       const pid = pRes.rows[0].id;
 
-      if (p.name.includes('Rumbo a Producción')) {
+      if (p.name.includes('TaskFlow')) {
         const t1 = await pool.query(
           "INSERT INTO tasks (project_id, title, description, status, priority, tags) VALUES ($1, $2, $3, $4, $5, '{infra, dev}') RETURNING id",
           [pid, 'Desplegar Docker en Vercel', 'Hay que ver si el build no explota con las nuevas dependencias.', 'done', 'high']
@@ -60,7 +60,7 @@ async function seedDemoData() {
         await pool.query("INSERT INTO subtasks (task_id, title, is_completed) VALUES ($1, 'Webhook de eventos', false), ($1, 'Precios en la landing', false), ($1, 'Mails de recibo', false)", [t3.rows[0].id]);
       }
 
-      if (p.name.includes('Barra de Comandos')) {
+      if (p.name.includes('Buscador')) {
         const t4 = await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{ux, front}') RETURNING id",
           [pid, 'Atajo global de teclado (Ctrl+K)', 'done', 'high']
@@ -79,7 +79,7 @@ async function seedDemoData() {
         );
       }
 
-      if (p.name.includes('Mantenimiento Global')) {
+      if (p.name.includes('Optimizaciones')) {
         const t6 = await pool.query(
           "INSERT INTO tasks (project_id, title, status, priority, tags) VALUES ($1, $2, $3, $4, '{backend}') RETURNING id",
           [pid, 'Caché con Redis', 'done', 'high']
@@ -116,7 +116,7 @@ async function seedDemoData() {
     await pool.query("INSERT INTO tasks (project_id, title, status, deleted_at) VALUES ($1, $2, $3, NOW())", [pTrash.rows[0].id, 'Investigar contratos inteligentes', 'todo']);
 
     // 4. TAREAS ARCHIVADAS Y ELIMINADAS EN PROYECTO 1
-    const mainPidRes = await pool.query('SELECT id FROM projects WHERE user_id = $1 AND name LIKE $2', [userId, '%Rumbo a Producción%']);
+    const mainPidRes = await pool.query('SELECT id FROM projects WHERE user_id = $1 AND name LIKE $2', [userId, '%TaskFlow%']);
     if (mainPidRes.rowCount! > 0) {
       const mainPid = mainPidRes.rows[0].id;
       await pool.query(

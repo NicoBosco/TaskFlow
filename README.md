@@ -46,36 +46,33 @@ Este monorepo está diseñado para un despliegue desacoplado:
 2. **Web (Frontend)**: Optimizado para **Vercel** con variables de entorno para la comunicación con la API.
 3. **Database**: Compatible con cualquier instancia de **PostgreSQL** (Neon.tech recomendado).
 
----
-
----
 ## Demo
 [https://taskflow-nine-sigma.vercel.app/](https://taskflow-nine-sigma.vercel.app/) 
 
 ## Screenshots
 ### Login
-![Login](./docs/login.png)
+![Login](./.github/assets/login.png)
 
 ### Dark mode, vista general de proyectos
-![Dark](./docs/darkmode.png)
+![Dark](./.github/assets/darkmode.png)
 
 ### Ver Proyecto en modo kanban
-![ProyectoKanban](./docs/proyecto.png)
+![ProyectoKanban](./.github/assets/proyecto.png)
 
 ### Ver Proyecto en modo lista
-![ProyectoLista](./docs/vista_lista.png)
+![ProyectoLista](./.github/assets/vista_lista.png)
 
 ### Creación de nuevo proyecto
-![CNP](./docs/creacion_nuevo_proyecto.png)
+![CNP](./.github/assets/creacion_nuevo_proyecto.png)
 
 ### Creación de nueva tarea
-![CNT](./docs/creacion_nueva_tarea.png)
+![CNT](./.github/assets/creacion_nueva_tarea.png)
 
 ### Acciones rápidas
-![AR](./docs/acciones_rapidas.png)
+![AR](./.github/assets/acciones_rapidas.png)
 
 ### Información del perfil
-![INFP](./docs/info_perfil.png)
+![INFP](./.github/assets/info_perfil.png)
 
 >## Nota
 
