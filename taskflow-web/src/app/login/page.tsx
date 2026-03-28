@@ -61,7 +61,7 @@ export default function LoginPage() {
         <div className="flex items-start gap-4 p-5 rounded-2xl bg-indigo-50/30 dark:bg-slate-900/40 border border-indigo-100/50 dark:border-white/5 shadow-sm mb-8">
           <div className="w-2 h-2 rounded-full bg-indigo-500 mt-2 shrink-0 animate-pulse" />
           <p className="text-[11px] leading-relaxed font-bold text-slate-700 dark:text-slate-400">
-            Acceso Demo: <span className="text-indigo-600 dark:text-indigo-300 underline underline-offset-2">demo@taskflow.com</span> / <span className="text-indigo-600 dark:text-indigo-300">123456</span>
+            Acceso Demo: <span className="text-indigo-600 dark:text-indigo-300">demo@taskflow.com</span> / <span className="text-indigo-600 dark:text-indigo-300">123456</span>
           </p>
         </div>
 

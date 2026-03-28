@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 
 // Página de gestión de perfil y soporte
 export default function ProfilePage() {
-  const { user, logout, updateProfile } = useAuth();
+  const { user, loading, logout, updateProfile } = useAuth();
+  const router = useRouter();
   
   // Estados para Modal de Soporte
   const [supportModal, setSupportModal] = useState(false);
@@ -19,12 +21,34 @@ export default function ProfilePage() {
   const [editName, setEditName] = useState('');
   const [editRole, setEditRole] = useState('');
 
-  if (!user) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="animate-pulse text-slate-400 font-bold uppercase tracking-widest">
           Cargando perfil...
         </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="max-w-md mx-auto py-32 px-4 text-center space-y-10 animate-fade-in">
+        <div className="w-24 h-24 bg-slate-100 dark:bg-white/5 rounded-[2rem] flex items-center justify-center mx-auto text-4xl">
+          🔒
+        </div>
+        <div className="space-y-4">
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Acceso Restringido</h1>
+          <p className="text-xl text-slate-500 font-medium leading-relaxed">
+            Por favor, inicie sesión para visualizar y gestionar su información de perfil.
+          </p>
+        </div>
+        <button 
+          onClick={() => router.push('/login')}
+          className="w-full py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-2xl shadow-indigo-600/30 hover:-translate-y-1 transition-all active:scale-95"
+        >
+          Ir al Inicio de Sesión
+        </button>
       </div>
     );
   }

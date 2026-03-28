@@ -215,7 +215,8 @@ export default function ProjectTasksPage() {
       <Modal isOpen={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Confirmar Acción" maxWidth="sm">
         <div className="p-10 space-y-10">
           <p className="text-xl text-slate-500 font-bold leading-relaxed transition-colors dark:text-slate-400">
-            ¿Deseas eliminar permanentemente la tarea <span className="text-slate-900 dark:text-slate-100 font-black">{deleteConfirm?.title}</span>?
+            ¿Deseas eliminar {view === 'deleted' ? 'permanentemente ' : ''}la tarea <span className="text-slate-900 dark:text-slate-100 font-black">{deleteConfirm?.title}</span>?
+            {view !== 'deleted' && <span className="block mt-2 text-sm text-slate-400">La misma será movida a la Papelera.</span>}
           </p>
           <div className="flex gap-4">
             <Button variant="ghost" className="flex-1" onClick={() => setDeleteConfirm(null)}>Cancelar</Button>
