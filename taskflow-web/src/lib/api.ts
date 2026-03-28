@@ -69,9 +69,9 @@ export const tasksApi = {
   
   update: (id: number, payload: Partial<Task>) => api.put<Task>(`/tasks/${id}`, payload).then((r: AxiosResponse<Task>) => r.data),
   
-  archive: (id: number) => api.post<Task>(`/tasks/${id}/archive`).then((r: AxiosResponse<Task>) => r.data),
-  unarchive: (id: number) => api.post<Task>(`/tasks/${id}/unarchive`).then((r: AxiosResponse<Task>) => r.data),
-  restore: (id: number) => api.post<Task>(`/tasks/${id}/restore`).then((r: AxiosResponse<Task>) => r.data),
+  archive: (id: number) => api.patch<Task>(`/tasks/${id}/archive`).then((r: AxiosResponse<Task>) => r.data),
+  unarchive: (id: number) => api.patch<Task>(`/tasks/${id}/unarchive`).then((r: AxiosResponse<Task>) => r.data),
+  restore: (id: number) => api.patch<Task>(`/tasks/${id}/restore`).then((r: AxiosResponse<Task>) => r.data),
   
   delete: (id: number) => api.delete(`/tasks/${id}`).then((r: AxiosResponse) => r.data),
   permanentDelete: (id: number) => api.delete(`/tasks/${id}/permanent`).then((r: AxiosResponse) => r.data),

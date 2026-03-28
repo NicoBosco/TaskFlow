@@ -25,7 +25,7 @@ describe('Componente Button', () => {
     render(<Button loading>Submit</Button>);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    // Verification of the SVG presence (hidden attribute or class)
+    // Verificación de la presencia del SVG de carga
     expect(button.querySelector('svg')).toBeInTheDocument();
   });
 

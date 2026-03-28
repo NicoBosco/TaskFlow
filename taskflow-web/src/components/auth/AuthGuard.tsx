@@ -4,10 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-/**
- * AuthGuard protects client-side routes.
- * It redirects to /login if the user is not authenticated.
- */
+// AuthGuard protege rutas del lado del cliente
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -15,12 +12,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      // Redirect to login, and optionally remember where we wanted to go
+      // Redirige al login recordando la ruta de origen
       router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
     }
   }, [user, loading, router, pathname]);
 
-  // While loading or not authenticated, don't show the protected content
+  // Mientras carga o sin autenticación, no renderizamos el contenido protegido
   if (loading || !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">

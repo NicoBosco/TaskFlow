@@ -104,9 +104,9 @@ export async function unarchiveProject(req: AuthenticatedRequest, res: Response,
 
 export async function deleteProject(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const deleted = await projectService.permanentDelete(parseInt(req.params.id), req.user!.id);
-    if (!deleted) throw new AppError('Proyecto no encontrado', 404);
-    res.json({ message: 'Proyecto eliminado correctamente' });
+    const project = await projectService.softDelete(parseInt(req.params.id), req.user!.id);
+    if (!project) throw new AppError('Proyecto no encontrado', 404);
+    res.json({ message: 'Proyecto movido a la papelera', project });
   } catch (err) { next(err); }
 }
 

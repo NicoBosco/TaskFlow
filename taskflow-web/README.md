@@ -5,10 +5,11 @@ Interfaz de gestión de proyectos construida con Next.js 16, enfocada en ofrecer
 ## Stack Técnico
 
 - **Framework**: Next.js 16 con App Router (Turbopack)
-- **Estado Global**: React Context API para Autenticación y Temas
-- **Estilos**: Tailwind CSS con un sistema de diseño personalizado y animaciones optimizadas
+- **Estado Global**: React Context API para autenticación y temas
+- **Estilos**: Tailwind CSS con sistema de diseño personalizado y animaciones optimizadas
 - **Comunicación**: Axios con interceptores para gestión de tokens y errores
-- **Componentes**: Arquitectura basada en componentes reutilizables y headless-ui
+- **Drag & Drop**: `@dnd-kit` para el tablero Kanban (columnas arrastrables)
+- **Componentes**: Arquitectura basada en componentes reutilizables propios
 
 ## Configuración
 
@@ -20,9 +21,10 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api
 
 ## Flujo de Seguridad
 
-1.  **AuthContext & Persistencia**: Gestión de tokens en `localStorage` con restauración automática de sesión al cargar la app.
-2.  **Protección de Rutas**: Implementación de un `AuthGuard` que intercepta accesos a `/projects` y derivados, redirigiendo al login si no hay una sesión activa.
-3.  **Manejo de Sesión Expirada**: El cliente detecta respuestas `401 (Unauthorized)` del servidor y fuerza el cierre de sesión local para mantener la integridad.
+1. **AuthContext y Persistencia**: Gestión de tokens en `sessionStorage`. La sesión se mantiene mientras la pestaña esté abierta y se limpia automáticamente al cerrarla.
+2. **Protección de Rutas**: Implementación de un `AuthGuard` que intercepta accesos a `/projects` y `/profile`, redirigiendo al login si no hay sesión activa.
+3. **Guardia de Invitado**: La página de login detecta sesiones activas y redirige automáticamente al dashboard de proyectos.
+4. **Manejo de Sesión Expirada**: El cliente detecta respuestas `401 (Unauthorized)` del servidor y fuerza el cierre de sesión local para mantener la integridad.
 
 ## Estructura de Rutas
 
@@ -34,8 +36,8 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ## Decisiones de Diseño
 
 - **Fase de Captura (Keyboard Shortcuts)**: Uso de eventos en fase de captura para el atajo `Ctrl + K`, asegurando que el buscador interno tenga prioridad sobre el navegador.
-- **Tailwind CSS**: Implementación de un sistema de diseño técnico y austero mediante utilidades CSS, optimizando el bundle final.
-- **URL as State**: Gran parte de la navegación (filtros de vista) se maneja mediante parámetros de URL, permitiendo compartir vistas específicas fácilmente.
+- **Tailwind CSS**: Implementación de un sistema de diseño mediante utilidades CSS, optimizando el bundle final.
+- **URL as State**: La navegación y los filtros de vista se manejan mediante parámetros de URL, permitiendo compartir vistas específicas fácilmente.
 
 ## Despliegue (Vercel) 🚀
 
@@ -46,11 +48,4 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ## Limitaciones
 
 - No cuenta con internacionalización (i18n), el idioma es únicamente español.
-- El ordenamiento de tareas es fijo por prioridad y fecha, sin drag & drop manual por ahora.
-- No hay pre-renderizado (SSR) de datos protegidos por seguridad de los tokens.
-
----
-> [!NOTE]
-> Para la gestión de estados complejos como el arrastre de tareas, el proyecto utiliza `@dnd-kit`, aunque su implementación actual es estructural para facilitar la legibilidad del código base.
-
-
+- No hay pre-renderizado (SSR) de datos protegidos, por seguridad del manejo de tokens en el cliente.
