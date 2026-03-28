@@ -1,19 +1,36 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks';
 import Input from '@/components/ui/Input';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { user, loading: authLoading, login } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Guest Guard: Redirigir si ya está autenticado
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace('/projects');
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || (user && !loading)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#04080f]">
+        <div className="animate-pulse text-slate-300 font-black uppercase tracking-[0.3em]">
+          Verificando sesión...
+        </div>
+      </div>
+    );
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

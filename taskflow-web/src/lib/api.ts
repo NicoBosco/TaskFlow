@@ -13,6 +13,8 @@ import {
   Subtask
 } from '@/types';
 
+import { getToken } from '@/lib/auth';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 const api = axios.create({
@@ -21,7 +23,7 @@ const api = axios.create({
 
 // Interceptor para inyectar token
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('taskflow-token');
+  const token = getToken();
   if (token && config.headers) {
     config.headers.set('Authorization', `Bearer ${token}`);
   }
